@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  dsc_forma_pagamento: MyString
+  status_forma_pagamento: 1
+  usuario_alt_id: 1
+
+two:
+  dsc_forma_pagamento: MyString
+  status_forma_pagamento: 1
+  usuario_alt_id: 1

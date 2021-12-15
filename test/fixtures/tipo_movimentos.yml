@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  desc_tipo_movimento: MyString
+  status_tipo_movimento: MyString
+  usuario_alt_id: 1
+
+two:
+  desc_tipo_movimento: MyString
+  status_tipo_movimento: MyString
+  usuario_alt_id: 1

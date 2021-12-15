@@ -1,0 +1,19 @@
+﻿<fieldset class="listar_fora" style="height:298px;">
+	<b>HISTÓRICO DO LANÇAMENTO</b>
+	<div class="listar" style="height:307px;">
+	<table  style="width: 345px; text-align: left; position:relative;">
+		<tr style="background-color: #E6E6E6">
+		<td style="text-align: center;">EVENTOS</td><td>&nbsp;</td>
+		</tr>
+		<% for h in @historico do %>
+		<tr>
+			<td style="border-right: dotted gray 1px; text-align:center;" rowspan="2" class="tachado_imagem" align="center"><%= h.dsc_tipo_movimento == "Criação de Despesa" ? image_tag("/images/adicionar.png", :title => "Criação de Despesa") : h.dsc_tipo_movimento == "Reprovação de Despesa" ? image_tag("/images/reprovado.png", :title => "Reprovação de Despesa") : h.dsc_tipo_movimento == "Edição de Despesa" ? image_tag("/images/application_edit.png", :title => "Edição de Despesa") : h.dsc_tipo_movimento == "Aprovação de Despesa" ? image_tag("/images/aprovado.png", :title => "Aprovação de Despesa") : h.dsc_tipo_movimento == "Exclusão de Despesa" ? image_tag("/images/excluir.png", :title => "Reprovação de Despesa") : image_tag("/images/pendente_p_aprova.png", :title => "Envio de Despesa para Aprovação") %></td>
+			<td>Data e Hora: <%= h.created_at.strftime("%d/%m/%Y") %>&nbsp;<%= h.created_at.strftime("%H:%M") %></td>
+		</tr>
+		<tr>
+			<td class="tachado">Responsável:<b> <%= h.nome %></b><%= !h.obs_historico_movimento.nil? ? image_tag("/images/reticencias.png", :title => h.obs_historico_movimento) : "" %></td>
+		</tr>
+		<% end %>
+	</table>
+	</div>
+</fieldset>

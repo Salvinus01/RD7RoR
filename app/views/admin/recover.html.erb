@@ -1,0 +1,12 @@
+﻿
+<%= form_tag recuperar_senha_url, :method => :post do %>
+	<div class="tudo">
+		<div class="corpo">
+			<div id="log">E-mail:</div>
+			<br>
+			<%= text_field_tag :email, nil,  :style=>"width:100%;"%>
+			<br><br>
+			<span style="float: right;"><%= submit_tag "Enviar", :class => "buscar", :onclick => "return verificaCampo();" %>&nbsp;&nbsp;<%= link_to((button_to_function "Voltar", "window.location = '/'",:class => "buscar"), root_url) %></span>
+		</div>
+	</div>
+<% end %>

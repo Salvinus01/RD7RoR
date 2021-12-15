@@ -1,0 +1,19 @@
+﻿<%= form_tag executa_alterar_senha_url(@usuario), :method => :post do %>
+	<div class="tudo">
+		<div class="corpo">
+			<%= label_tag  :current_password, "Senha atual:" %>
+			<br>
+			<%= password_field_tag :current_password  %>
+			<br>
+			<%= label_tag :password,  "Nova senha:"%>
+			<br>
+			<%= password_field_tag :password %>
+			<br>
+			<%= label_tag :password_confirmation, "Confirmar senha:" %>
+			<br>
+			<%= password_field_tag :password_confirmation %>
+			<br><br>
+			<span style="float: left;"><%= submit_tag "Confirmar", :class => "buscar" %>&nbsp;&nbsp;<%= link_to((button_to_function "Voltar", "window.location = '/home/index'",:class => "buscar"), home_index_url) %></span>
+		</div>
+	</div>
+<% end %>

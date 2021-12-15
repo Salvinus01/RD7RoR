@@ -1,0 +1,16 @@
+﻿<%= form_for(@tipo_lancamento) do |t| %>
+	<input type="hidden" name="despesa[usuario_alt_id]" id="despesa_usuario_alt_id" value="<%= @usuario_logado.id %>">
+	<div class="cadastro">
+		<%= t.label :dsc_tipo_lancamento %>
+		<br>
+		<%= t.text_field :dsc_tipo_lancamento, :required => true %>
+		<br>
+		<br>
+		<%= t.label :status_tipo_lancamento %>
+		<br>
+		<%= t.radio_button :status_tipo_lancamento, 1, :required => true, :checked => "checked" %> Ativo&nbsp;<%= t.radio_button :status_tipo_lancamento, 0, :required => true %> Inativo
+		<br>
+		<br>
+		<%= t.submit "Salvar", :class => "buscar" %>&nbsp;<%= link_to((button_to_function "Cancelar", "window.location = '/tipo_lancamentos'",:class => "buscar"), tipo_lancamentos_url) %>
+	</div>
+<% end %>

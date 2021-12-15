@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  dsc_tipo_lancamento: MyString
+  status_tipo_lancamento: 1
+  usuario_alt_id: 1
+
+two:
+  dsc_tipo_lancamento: MyString
+  status_tipo_lancamento: 1
+  usuario_alt_id: 1

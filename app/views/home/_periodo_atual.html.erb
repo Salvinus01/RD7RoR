@@ -1,0 +1,34 @@
+﻿<div class="periodo_atual">
+	<div style="text-align:right;">
+	<table style="float:right; width:100%;">
+		<% if @periodo.first.dt_inicio_lancamento <= Time.now && @periodo.first.dt_fim_lancamento >= Time.now.to_date %>
+			<tr align=right; class="tachado">
+				<td class="tachado">Período de Lançamento:&nbsp;<b><%= @periodo.first.dt_inicio_lancamento.strftime("%d/%m/%Y") %>&nbsp;à&nbsp;<%= @periodo.first.dt_fim_lancamento.strftime("%d/%m/%Y") %></b></td>
+			</tr>
+		<% else %>
+			<tr valign="center" align="center"><td class="tachado">Não há Período Aberto.</td></tr>
+		<% end %>
+		<% if @periodo.first.dt_aprovacao >= Time.now.to_date and @periodo.first.dt_inicio_lancamento <= Time.now.to_date %>	
+			<tr>
+				<td class="tachado">Data limite para envio dos lançamentos para aprovação: <b><%= @periodo.first.dt_fim_lancamento.strftime("%d/%m/%Y") %></b></td>
+			</tr>
+			<tr>
+				<td class="tachado">Data limite para aprovação dos lançamentos: <b><%= @periodo.first.dt_aprovacao.strftime("%d/%m/%Y") %></b></td>
+			</tr>
+		<% else %>
+			<tr>
+				<td class="tachado">
+					Lançamentos do último período já passaram por aprovação.
+				</td>
+			</tr>
+		<% end %>
+		<tr>
+		<% if @periodo.first.dt_inicio_lancamento <= Time.now.to_date and @periodo.first.dt_envio_financeiro >= Time.now.to_date %>
+			<td>Data de envio para Financeiro: <b><%= @periodo.first.dt_envio_financeiro.strftime("%d/%m/%Y") %></b></td>
+		<% else %>
+			<td>Lançamentos do último período já foram enviados para Financeiro.</td>
+		<% end %>
+		</tr>
+	</table>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  cod_centro_custo: 1
+  dsc_centro_custo: MyString
+  status_centro_custo: 1
+  usuario_alt_id: 1
+
+two:
+  cod_centro_custo: 1
+  dsc_centro_custo: MyString
+  status_centro_custo: 1
+  usuario_alt_id: 1

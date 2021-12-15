@@ -1,0 +1,16 @@
+56|18|1|nicolas@ultra77|1|Despesas Extraordinárias|1|KM|2|Cartão de Crédito|3|Regional SP|2012-03-08|6542|115.00|1|90.00|Gasto com combustível|2|Aprovado|2012-03-08 12:12:24 -0300|2012-03-08 17:56:53 -0300|Excedeu o limite da nota fiscal|
+62|18|2|luizg@ultra77|1|Despesas Extraordinárias|2|Fotocópias|2|Cartão de Crédito|2|Regional Norte e nordeste|2012-03-08|45252|55.46|6|0.05|teste de grafico|2|Aprovado|2012-03-09 18:53:18 -0300|2012-03-13 13:56:38 -0300||
+73|18|2|luizg@ultra77|1|Despesas Extraordinárias|2|Fotocópias|2|Cartão de Crédito|3|Regional SP|2012-03-06|57576|222.22|1|1.50|Cópias para o diretor|2|Aprovado|2012-03-14 12:35:43 -0300|2012-03-14 14:33:21 -0300||
+74|18|2|luizg@ultra77|1|Despesas Extraordinárias|2|Fotocópias|2|Cartão de Crédito|2|Regional Norte e nordeste|2012-03-13|452|55.46|6|0.05|teste de grafico|2|Aprovado|2012-03-14 12:36:02 -0300|2012-03-14 12:44:53 -0300||
+57|18|2|luizg@ultra77|1|Despesas Extraordinárias|9|Estacionamento|2|Cartão de Crédito|3|Regional SP|2012-03-07|46545|150.00|1|99.00|Gasto no estacionamento|2|Aprovado|2012-03-08 12:14:38 -0300|2012-03-08 18:00:18 -0300|Valor muito alto, nao efetuaremos o reembolso.|
+69|18|1|nicolas@ultra77|1|Despesas Extraordinárias|9|Estacionamento|2|Cartão de Crédito|3|Regional SP|2012-03-12|042|150.00|1|99.00|Gasto no estacionamento do shopping|2|Aprovado|2012-03-13 14:30:27 -0300|2012-03-14 00:28:44 -0300||
+59|18|1|nicolas@ultra77|1|Despesas Extraordinárias|10|Restaurante|2|Cartão de Crédito|3|Regional SP|2012-03-07|9877|25.00|1|19.00|Restaurante|2|Aprovado|2012-03-08 12:22:33 -0300|2012-03-08 17:58:51 -0300||
+71|18|1|nicolas@ultra77|1|Despesas Extraordinárias|10|Restaurante|2|Cartão de Crédito|3|Regional SP|2012-03-12|8797|25.00|2|19.00|Restaurante|2|Aprovado|2012-03-13 14:35:13 -0300|2012-03-14 14:35:56 -0300|excedeu valor
+|
+65|18|2|luizg@ultra77|1|Despesas Extraordinárias|11|Correio|1|Cartão de Débito|2|Regional Norte e nordeste|2012-03-07|5656|5.13|543|56.56|Teste Grafico|2|Aprovado|2012-03-09 18:57:55 -0300|2012-03-13 13:51:28 -0300||
+72|18|2|luizg@ultra77|3|Despesas Pessoais|11|Correio|1|Cartão de Débito|2|Regional Norte e nordeste|2012-03-01|4012|5.00|543|56.00|Teste Grafico|2|Aprovado|2012-03-13 14:37:29 -0300|2012-03-14 12:41:37 -0300|excedeu valor|
+77|18|2|luizg@ultra77|3|Despesas Pessoais|11|Correio|4|Cheque|2|Regional Norte e nordeste|2012-03-06|98774|5.00|543|56.00|Teste Grafico|2|Aprovado|2012-03-14 16:26:09 -0300|2012-03-15 18:40:10 -0300||
+81|18|2|luizg@ultra77|2|Despesas Normais|11|Correio|2|Cartão de Crédito|3|Regional SP|2012-03-14|1475|10.00|2|10.00|sdasd|2|Aprovado|2012-03-15 13:29:40 -0300|2012-03-15 18:41:44 -0300|Excedeu valor|
+82|18|1|nicolas@ultra77|2|Despesas Normais|11|Correio|2|Cartão de Crédito|3|Regional SP|2012-03-15|785|10.00|2|10.00|sdasd|2|Aprovado|2012-03-15 18:38:17 -0300|2012-03-15 19:05:36 -0300||
+64|18|1|nicolas@ultra77|1|Despesas Extraordinárias|13|Transporte|1|Cartão de Débito|2|Regional Norte e nordeste|2012-03-07|123|2.31|123|1.23|Teste Grafico|2|Aprovado|2012-03-09 18:56:27 -0300|2012-03-14 00:27:42 -0300||
+75|18|2|luizg@ultra77|1|Despesas Extraordinárias|13|Transporte|1|Cartão de Débito|2|Regional Norte e nordeste|2012-03-07|4141|23.00|5|12.00|Teste Grafico|2|Aprovado|2012-03-14 12:36:18 -0300|2012-03-14 14:38:58 -0300|excedeu valor|

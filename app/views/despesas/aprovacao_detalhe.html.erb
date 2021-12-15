@@ -1,0 +1,210 @@
+﻿<script>
+$(document).ready(function() {          
+    $(".menu_aparece").hide();
+    $(".menu_expande").bind("click",function(){
+        $(".menu_aparece").slideToggle(1);
+		if (aberto){
+			$("#seta").attr("src", "/images/arrow-down.png");
+			aberto = false;
+		}else {
+			$("#seta").attr("src", "/images/arrow-up.png");
+			aberto = true;
+		}
+        return false;
+	});
+	var aberto = false;
+});
+
+	$(function() {
+		$("#dialog:ui-dialog").dialog("destroy");
+		$("#motivo_reprovacao").dialog({
+			autoOpen: false,
+			height: 210,
+			width: 380,
+			modal: true
+		});
+		$( "#cancelar" )
+			.click(function() {
+				$("#motivo_reprovacao").dialog("close");
+			});
+	});
+
+</script>
+<% if params[:tipo_lancamento] != "0" and !params[:tipo_lancamento].nil? and params[:tipo_lancamento] != "" or params[:tipo_despesa] != "0" and !params[:tipo_despesa].nil? and params[:tipo_despesa] != "" or params[:forma_pagamento] != "0" and !params[:forma_pagamento].nil? and params[:forma_pagamento] != "" or params[:status] != "0" and !params[:status].nil? and params[:status] != "" or params[:centro_custo] != "0" and !params[:centro_custo].nil? and params[:centro_custo] != "" %>
+	<script>
+	$(document).ready(function() {
+		$(".menu_aparece").slideToggle(300);
+		return true;
+	});
+	</script>
+<% end %>
+<div class="pesquisa" style="margin-top: 30px;">
+	<table>
+		<tr>
+			<td>Nome: </td><td><b><%= @usuario.nome %></b></td><td>Status:</td><td><b><%= @status_lancamentos %></b></td>
+		</tr>
+		<tr>
+			<td>Período: </td><td><b><%= @periodo.dt_inicio_lancamento.strftime("%d/%m/%Y") %> a <%= @periodo.dt_fim_lancamento.strftime("%d/%m/%Y") %></b></td><td>Valor total aprovado:</td><td><b><%= number_to_currency(@valor_total.first.total, :unit => "R$", :separator => ",", :delimiter => ".") %></b></td>
+		</tr>
+	</table>
+</div>
+<br>
+<div style="margin-top:120px;" class="menu_expande">
+	FILTRO AVANÇADO <%= image_tag("/images/arrow-down.png", :title => "Expandir", :width => "20px", :height => "20px", :id => "seta") %>
+</div>
+
+<div class="menu_aparece">
+	<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+		<input type="hidden" name="page" id="pagina" value="<%= params[:page].nil? ? 1 : params[:page]%>">
+		<table>
+			<tr>
+				<td>Tipo de Lançamento:</td><td>Tipo de Despesa:</td><td>Forma de Pagamento:</td><td>Status:</td><td>Centro de Custo:</td><td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="tipo_lancamento" style="width: 150px;">
+						<option value="0"></option>
+						<%= options_for_select @tipo_lancamentos.collect{|tp| [tp.dsc_tipo_lancamento, tp.id]}, :selected => params[:tipo_lancamento] %>
+					</select>
+				</td>
+				<td>
+					<select name="tipo_despesa">
+						<option value="0"></option>
+						<%= options_for_select @tipo_despesas.collect{|td| [td.dsc_tipo_despesa, td.id]}, :selected => params[:tipo_despesa] %>
+					</select>
+				</td>
+				<td>
+					<select name="forma_pagamento" id="forma_pagamento">
+						<option value="0"></option>
+						<%= options_for_select @forma_pagamentos.collect{|f| [f.dsc_forma_pagamento, f.id]}, :selected => params[:forma_pagamento] %>
+					</select>
+				</td>
+				<td>
+					<select name="status" id="status" style="width: 100px;">
+						<option value="0"></option>
+						<%= options_for_select @status.where("id <> 1").collect{|s| [s.dsc_status_lancamento, s.id]}, :selected => params[:status] %>
+					</select>
+				</td>
+				<td>
+					<select name="centro_custo" id="centro_custo" style="width:125px">
+						<option value="0" ></option>
+						<%= options_for_select @centro_custos.collect{|c| [c.cod_centro_custo.to_s + " - " + c.dsc_centro_custo, c.id]}, :selected => params[:centro_custo] %>
+					</select>
+				</td>
+				<td><%= submit_tag("Buscar", :class => "buscar", :onclick => "document.getElementById('pagina').value = '1';") %></td>
+			</tr>
+		</table>
+		<input type="hidden" value="<%= params[:usuario] %>" name="usuario">
+		<input type="hidden" value="<%= params[:periodo] %>" name="periodo">
+		
+</div>
+<% if @lancamentos.count != 0 %>
+
+<% if @periodo.dt_aprovacao > Time.now %>
+	<div style="float:right; margin-right:100px; margin-top:10px;">
+			<%= image_tag("/images/Tick.png", :title => "Aprovar", :alt => "Aprovar", :width => "20px", :height => "20px") %><%= submit_tag "Aprovar", :class => "botao", :onclick => "return confirm('Deseja aprovar a(s) despesa(s) selecionada(s)?')" %>&nbsp;&nbsp;
+			<%= image_tag("/images/editdelete.png", :title => "Reprovar", :alt => "Reprovar", :width => "20px", :height => "20px") %><%= button_tag "Reprovar", :class => "botao", :type => "button", :onclick => "return motivoReprovar();" %>
+	</div>
+<% end %>
+	<table class="resultado_pesquisa" align="center">
+		<tr class="titulo">
+			<td style="text-align: center;"><input type="checkbox" name="loteSelecionarTodos" id="loteSelecionarTodos"  /></td>
+			<td style="text-align: center;">Status</td>
+			<td>Tipo</td>
+			<td colspan="2">Dados</td>
+			<td style="text-align: center;">Ações</td>
+		</tr>
+		<% cont = 0 %>
+		<% for l in @lancamentos do %>
+			<tr class="<%= cont%2 == 0 ? "zebra" : "" %>">
+			<td style="text-align: center;">
+				<% if l.status == "Pendente para Aprovação" and @periodo.dt_aprovacao > Time.now %>
+					<input type="checkbox" name="lote[]" value="<%= l.id %>"/>
+				<% end %>
+			</td>
+			<td style="text-align: center;">
+				<%= case l.status
+						when "Pendente"
+							image_tag("/images/edit.png", :alt => "Pendente", :title => "Pendente", :width => "25px", :height => "25px")
+						when "Aprovado"
+							image_tag("/images/Tick.png", :alt => "Aprovado", :title => "Aprovado", :width => "25px", :height => "25px")
+						when "Reprovado"
+							image_tag("/images/editdelete.png", :alt => "Reprovado", :title => "Reprovado", :width => "25px", :height => "25px")
+						when "Pendente para Aprovação"
+							image_tag("/images/pendente_laranja.jpg", :alt => "Pendente para Aprovação", :title => "Pendente para Aprovação", :width => "25px", :height => "25px")
+						when "Expirado"
+							image_tag("/images/expirado.png", :alt => "Expirado", :title => "Expirado", :width => "25px", :height => "25px")
+						when "Não Aprovado"
+							image_tag("/images/nao_aprovado.png", :alt => "Não Aprovado", :title => "Não Aprovado", :width => "25px", :height => "25px")
+					end
+				%>
+			</td>
+			<td>
+				<b><%=	l.dsc_tipo_lancamento %></b>
+			</td>
+			<td style="border-right: none; text-align: left;" class="<%= l.status == "Reprovado" ? "Reprovado" : "" %>">			
+				<b><%=	l.tipo_despesa %></b>
+				<br>
+				Descrição: <b><%=	l.dsc_despesa %></b>
+				<br>
+				<% if l.status == "Reprovado" %>
+					Observação:
+					<% if l.dsc_motivo.size <= 20 %>
+						<%= l.dsc_motivo %>
+					<% else %>
+						<%= l.dsc_motivo[0, 19] %><%= image_tag("/images/reticencias.png", :title => l.dsc_motivo)%>
+					<% end %>
+					<br>
+				<% end %>
+				Forma de Pagamento: <b><%= l.dsc_forma_pagamento %></b>
+			</td>
+			<td  style="text-align: left; border-left: none;" class="<%= l.status == "Reprovado" ? "Reprovado" : "" %>">
+				Data Doc.(NF): <b><%= l.dt_documento.strftime("%d/%m/%Y") %></b> - Nº Doc.(NF): <b><%= l.nro_documento %></b>
+				<br>
+				Valor Doc.(NF): <b><%= number_to_currency(l.vlr_documento, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+				<br>
+				Valor do reembolso: <b><%= number_to_currency(l.vlr_despesa, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+				<br>
+				Quantidade: <b><%= l.nro_quantidade %></b> - Centro de Custo: <b><%= l.cod_centro_custo %></b>
+			</td>
+			<td style="text-align: center;"><% if l.status == "Pendente para Aprovação" and @periodo.dt_aprovacao > Time.now %>
+				<%= link_to(image_tag("/images/Tick.png", :title => "Aprovar", :width => "15px", :height => "15px", :onclick => "return confirm('Deseja aprovar a(s) despesa(s) selecionada(s)?')"), :commit => "Aprovar", :lote => l, :usuario => params[:usuario], :periodo => params[:periodo], :tipo_lancamento => params[:tipo_lancamento], :tipo_despesa => params[:tipo_despesa], :forma_pagamento => params[:forma_pagamento], :status => params[:status], :centro_custo => params[:centro_custo], :page => params[:page].nil? ? 1 : params[:page]) %>
+				<%= image_tag("/images/editdelete.png", :title => "Reprovar", :width => "15px", :height => "15px", :onclick => "return motivoReprovar(" + l.id.to_s + (l.dsc_motivo.nil? ? "" : ", '" + l.dsc_motivo + "'") + ");", :style => "cursor: pointer;") %>
+				<% end %>
+			</td>
+		</tr>
+		<% cont = cont + 1 %>
+		<% end %>
+	</table>
+	<% if @periodo.dt_aprovacao > Time.now %>
+	<div style="float:right; margin-right:100px; margin-top:10px;">
+			<%= image_tag("/images/Tick.png", :title => "Aprovar", :alt => "Aprovar", :width => "20px", :height => "20px") %><%= submit_tag "Aprovar", :class => "botao", :onclick => "return confirm('Deseja aprovar a(s) despesa(s) selecionada(s)?')" %>&nbsp;&nbsp;
+			<%= image_tag("/images/editdelete.png", :title => "Reprovar", :alt => "Reprovar", :width => "20px", :height => "20px") %><%= button_tag "Reprovar", :class => "botao", :type => "button", :onclick => "return motivoReprovar();" %>
+	</div>
+	<% end %>
+	<div style="padding-left:300px; margin-top:60px;"><%= will_paginate @lancamentos, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+
+<% else %>
+	<div class="nenhum_resultado">Pesquisa não retornou nenhum resultado.</div>
+<% end %>
+<% end %>
+<br>
+	<div id="motivo_reprovacao">
+	<div class="conteudo_dialog">
+		<%= form_tag nil, :method => "get" do %>
+			Preencha o campo de observação abaixo:<br>
+			<textarea name="motivo" rows="5" cols="35" required="required"></textarea><br>
+			<%= submit_tag("Reprovar", :class => "buscar") %>
+			<input type="button" id="cancelar" value="Cancelar" class="buscar"><br><br>
+			<input type="hidden" name="usuario" value="<%= params[:usuario] %>">
+			<input type="hidden" name="periodo" value="<%= params[:periodo] %>">
+			<input type="hidden" name="tipo_lancamento" value="<%= params[:tipo_lancamento] %>">
+			<input type="hidden" name="tipo_despesa" value="<%= params[:tipo_despesa] %>">
+			<input type="hidden" name="forma_pagamento" value="<%= params[:forma_pagamento] %>">
+			<input type="hidden" name="status" value="<%= params[:status] %>">
+			<input type="hidden" name="centro_custo" value="<%= params[:centro_custo] %>">
+			<input type="hidden" name="page" value="<%= params[:page].nil? ? 1 : params[:page]%>">
+			<input type="hidden" name="lote" id="despesas">
+		<% end %>
+	</div>
+	</div>

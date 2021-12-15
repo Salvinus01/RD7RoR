@@ -1,0 +1,87 @@
+﻿
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+<fieldset class="cadastro">
+	<legend>FILTRO</legend>
+	<table>
+		<tr>
+			<td>Período:</td><td>Status:</td><td class="<%= @status_periodo %>"><%= @status_periodo %></td>
+		</tr>
+		<tr>
+			<td>
+				<select name="periodo" onchange="return carregaPeriodo();">
+					<%= options_for_select @periodos.collect{|p| [p.dt_inicio_lancamento.strftime("%d/%m/%Y") + " à " + p.dt_fim_lancamento.strftime("%d/%m/%Y"), p.id]}, :selected => params[:periodo] %>
+				</select>
+			</td>
+			<td>
+				Valor Total Aprovado:
+			</td>
+			<td class="Fechado">
+				<%= number_to_currency(@valor_total.first.total, :unit => "R$", :separator => ",", :delimiter => ".") %>
+			</td>
+		</tr>
+	</table>
+</fieldset>
+<div class="menu_expande">
+	Filtro Avançado
+</div>
+<div class="menu_aparece">
+	<table style="width: 100%;" cellspacing="10">
+		<tr>
+			<td colspan="2" >Tipo de Despesa:</td><td colspan="2">Tipo de Lançamento:</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<select name="tipo_despesa" id="tipo_despesa" style="width: 100%;">
+					<option value="0"></option>
+					<%= options_for_select @tipo_despesas.collect{|td| [td.dsc_tipo_despesa, td.id]}, :selected => params[:tipo_despesa] %>
+				</select>
+			</td>
+			<td colspan="2">
+				<select name="tipo_lancamento" id="tipo_lancamento"  style="width: 100%;">
+					<option value="0"></option>
+					<%= options_for_select @tipo_lancamentos.collect{|tp| [tp.dsc_tipo_lancamento, tp.id]}, :selected => params[:tipo_lancamento] %>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td  width="33%">Status:</td><td colspan="2" width="33%">Nº Doc.(NF):</td><td width="33%">Centro de Custo:</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="status" id="status" style="width: 270px;">
+					<option value="0"></option>
+					<%= options_for_select @status.collect{|s| [s.dsc_status_lancamento, s.id]}, :selected => params[:status] %>
+				</select>
+			</td>
+			<td colspan="2"><input type="text" name="nro_documento" value="<%= params[:nro_documento] %>" size="10" id="nro_documento" style="height: 50px; width: 100%;"></td>
+			<td>
+				<select name="centro_custo" id="centro_custo" style="width:300px;">
+					<option value="0" style="min-width:300px"></option>
+					<%= options_for_select @centro_custos.collect{|c| [c.cod_centro_custo.to_s + " - " + c.dsc_centro_custo, c.id]}, :selected => params[:centro_custo] %>
+				</select>
+			</td>
+		</tr>
+		</tr>
+			<td>De:</td><td colspan="2">Até:</td><td>Forma de Pagamento:</td>
+		</tr>
+		<tr>
+			<td><input type="text" name="de" value="<%= params[:de] %>" size="10" id="de"></td>
+			<td colspan="2"><input type="text" name="ate" value="<%= params[:ate] %>" size="10" id="ate"></td>
+			<td>
+			<select name="forma_pagamento" id="forma_pagamento">
+				<option value="0"></option>
+				<%= options_for_select @forma_pagamentos.collect{|f| [f.dsc_forma_pagamento, f.id]}, :selected => params[:forma_pagamento] %>
+			</select>
+		</td>
+	</table>
+</div>
+<% end %>
+
+<script>
+$(document).ready(function() {          
+    $(".menu_aparece").hide();
+    $(".menu_expande").bind("click",function(){
+        $(".menu_aparece").slideToggle(1);
+        return false;
+	});
+</script>

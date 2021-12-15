@@ -1,0 +1,30 @@
+﻿
+
+<%= form_for(@periodo) do |p| %>
+<div class="cadastro">
+	<input type="hidden" name="periodo[usuario_alt_id]" id="periodo_usuario_alt_id" value="<%= @usuario_logado.id %>">
+	<table cellpadding="2" cellspacing="5">
+		<tr>
+			<td><%= p.label :dt_inicio_lancamento %></td><td><%= p.label :dt_fim_lancamento %></td>
+		</tr>
+		<tr>
+			<td><%= p.text_field :dt_inicio_lancamento, :size => "15", :required => true %></td><td><%= p.text_field :dt_fim_lancamento, :size => "15", :required => true %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= p.label :dt_aprovacao %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= p.text_field :dt_aprovacao, :size => "15", :required => true %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= p.label :dt_envio_financeiro %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= p.text_field :dt_envio_financeiro, :size => "15", :required => true %></td>
+		</tr>
+	<tr><br><br>
+		<td colspan="2"><%= p.submit "Salvar", :class => "buscar", :onclick => "return verificaCampoDatas();" %>&nbsp;<%= link_to((button_to_function "Cancelar", "window.location = '/periodos'",:class => "buscar"), periodos_url) %></td>
+	</tr>
+</table>
+</div>
+<% end %>

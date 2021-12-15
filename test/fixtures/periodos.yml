@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  dt_inicio_lancamento: 2012-01-30 14:31:07
+  dt_fim_lancamento: 2012-01-30 14:31:07
+  dt_aprovacao: 2012-01-30 14:31:07
+  dt_envio_financeiro: 2012-01-30 14:31:07
+  status_periodo: 1
+  usuario_alt_id: 1
+
+two:
+  dt_inicio_lancamento: 2012-01-30 14:31:07
+  dt_fim_lancamento: 2012-01-30 14:31:07
+  dt_aprovacao: 2012-01-30 14:31:07
+  dt_envio_financeiro: 2012-01-30 14:31:07
+  status_periodo: 1
+  usuario_alt_id: 1

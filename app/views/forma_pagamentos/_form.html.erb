@@ -1,0 +1,16 @@
+﻿<%= form_for(@forma_pagamento) do |f| %>
+	<div class="cadastro">
+		<input type="hidden" name="forma_pagamento[usuario_alt_id]" id="forma_pagamento_usuario_alt_id" value="<%= @usuario_logado.id %>">
+		<%= f.label :dsc_forma_pagamento %>
+		<br>
+		<%= f.text_field :dsc_forma_pagamento, :required => true %>
+		<br>
+		<br>
+		<%= f.label :status_forma_pagamento %>
+		<br>
+		<%= f.radio_button :status_forma_pagamento, 1, :required => true, :checked => "checked" %> Ativo&nbsp;<%= f.radio_button :status_forma_pagamento, 0, :required => true %> Inativo
+		<br>
+		<br>
+		<%= f.submit "Salvar", :class => "buscar" %>&nbsp;<%= link_to((button_to_function "Cancelar", "window.location = '/forma_pagamentos'",:class => "buscar"), forma_pagamentos_url) %>
+	</div>
+<% end %>

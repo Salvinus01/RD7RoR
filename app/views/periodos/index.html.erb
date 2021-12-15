@@ -1,0 +1,95 @@
+﻿
+<br>
+<br>
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+<div class="pesquisa">
+	<table style="float:left;">
+		<tr>
+			<td>Mes:</td><td>Ano:</td><td>Status:</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="mes">
+					<%= options_for_select([["", 0], ["Janeiro", 1], ["Fevereiro", 2], ["Março", 3], ["Abril", 4], ["Maio", 5], ["Junho", 6], ["Julho", 7], ["Agosto", 8], ["Setembro", 9], ["Outubro", 10], ["Novembro", 11], ["Dezembro", 12]], :selected => params[:mes]) %>
+				</select>
+			</td>
+			<td>
+				<select name="ano">
+					<option value="0">&nbsp;</option>
+					<%= options_for_select @anos.collect{|a| [a.anos, a.anos]}, :selected => params[:ano] %>
+				</select>
+			</td>
+			<td>
+				<select name="status">
+					<option value="0"></option>
+					<option value="1">Aberto</option>
+					<option value="2">Em Aprovação</option>
+					<option value="3">Aprovado</option>
+					<option value="4">Fechado</option>
+				</select>
+			</td>
+			<td align=right colspan="3" align="right">
+				<%= submit_tag "Buscar", :class => "buscar" %>
+				<%= link_to((button_to_function "Novo", "window.location = '/periodos/new'",:class => "buscar"), "/periodos/new") %>
+			</td>
+		
+	</table>	
+	
+	
+</div>
+
+<% if @periodos.count != 0 %>
+<br>
+
+<table class="resultado_pesquisa" align="center" style="margin-top:90px;">
+	<tr class="titulo">
+		
+		<td>Início Lançamento</td>
+		<td>Fim Lançamento</td>
+		<td>Data Limite Aprovação</td>
+		<td>Data Envio Financeiro</td> 
+		<td>Status</td>
+		<td style="text-align: center;">Ações</td>
+	</tr>
+	
+	<% cont = 0 %>
+	<% for p in @periodos do %>
+		<tr class="<%= cont%2 == 0 ? "zebra" : "" %>">
+			
+			<td><%= p.dt_inicio_lancamento.strftime("%d/%m/%Y") %></td>
+			<td><%= p.dt_fim_lancamento.strftime("%d/%m/%Y") %></td>
+			<td><%= p.dt_aprovacao.strftime("%d/%m/%Y") %></td>
+			<td><%= p.dt_envio_financeiro.strftime("%d/%m/%Y") %></td>
+			<td><%= p.dt_inicio_lancamento <= Time.now && p.dt_fim_lancamento >= Time.now.to_date ? "Aberto" : p.dt_fim_lancamento < Time.now.to_date && p.dt_aprovacao >= Time.now.to_date ? "Em Aprovação" : p.dt_aprovacao < Time.now.to_date && p.dt_envio_financeiro > Time.now.to_date ? "Aprovado" : "Fechado" %></td>
+			<td style="text-align: center;">
+				<% if p.dt_envio_financeiro >= Time.now.to_date %>
+					<%= link_to(image_tag("/images/application_edit.png", :title => "Editar", :alt => "Editar"), edit_periodo_path(p)) %>
+				<% end %>	
+			</td>
+			<% cont = cont+1 %>
+	</tr>
+	<% end %>
+	
+</table><br>
+
+<br><br><br>
+<% else %>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="nenhum_resultado">Pesquisa não retornou resultado.</div>
+<% end %>		
+<% end %>
+
+<div style="margin-bottom:93px; margin-left:40%; margin-right:30%;"><%= will_paginate @periodos, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+<script type="text/javascript">
+
+		function loteSelecionarTodos() {
+			var ativar = "checked" == $("#loteSelecionarTodos").attr("checked");
+			$("input[name=lote\\[\\]]").attr("checked", ativar);
+		}
+		
+		$("#loteSelecionarTodos").unbind('change').live('change', loteSelecionarTodos);
+
+</script>

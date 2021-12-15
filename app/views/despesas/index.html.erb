@@ -1,0 +1,279 @@
+﻿<script src="/javascripts/raphael.js" type="text/javascript"></script>
+<script src="/javascripts/g.raphael-min.js" type="text/javascript"></script>
+<script src="/javascripts/g.pie-min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function() {          
+    $(".menu_aparece").hide();
+    $(".menu_expande").bind("click",function(){
+        $(".menu_aparece").slideToggle(1);
+		if (aberto){
+			$("#seta").attr("src", "/images/arrow-down.png");
+			aberto = false;
+		}else {
+			$("#seta").attr("src", "/images/arrow-up.png");
+			aberto = true;
+		}
+        return false;
+	});
+	var aberto = false;
+	var r = Raphael("holder"),
+	pie = r.piechart(240, 100, 50, [<% for v in @valores do %><%= v %>,<%end%>], { legend: [<% for l in @legenda do %>"R$ <%= l[0] %> - <%= l[1] %>",<%end%>], legendpos: "west"});
+
+	r.text(150, 15, "Tipos de Despesas").attr({ font: "15px sans-serif" });
+	pie.hover(function () {
+		this.sector.stop();
+		this.sector.scale(1.1, 1.1, this.cx, this.cy);
+
+		if (this.label) {
+			this.label[0].stop();
+			this.label[0].attr({ r: 7.5 });
+			this.label[1].attr({ "font-weight": 800 });
+		}
+	}, function () {
+		this.sector.animate({ transform: 's1 1 ' + this.cx + ' ' + this.cy }, 500, "bounce");
+
+		if (this.label) {
+			this.label[0].animate({ r: 5 }, 500, "bounce");
+			this.label[1].attr({ "font-weight": 400 });
+		}
+	});
+});
+
+	$(function() {
+		$("#dialog:ui-dialog").dialog("destroy");
+		$("#dialog_grafico").dialog({
+			autoOpen: false,
+            height: 250,
+            width: 370,
+            modal: false,
+			resizable: false
+        });
+	});
+function abreGrafico(){
+	$("#dialog_grafico").dialog("open");
+}
+</script>
+<% if params[:tipo_lancamento] != "0" and !params[:tipo_lancamento].nil? and params[:tipo_lancamento] != "" or params[:tipo_despesa] != "0" and !params[:tipo_despesa].nil? and params[:tipo_despesa] != "" or params[:forma_pagamento] != "0" and !params[:forma_pagamento].nil? and params[:forma_pagamento] != "" or params[:status] != "0" and !params[:status].nil? and params[:status] != "" or params[:centro_custo] != "0" and !params[:centro_custo].nil? and params[:centro_custo] != "" or params[:de] != "" and !params[:de].nil? or params[:ate] != "" and !params[:ate].nil? or params[:nro_documento] != "" and !params[:nro_documento].nil? %>
+	<script>
+	$(document).ready(function() {
+		$(".menu_aparece").slideToggle(300);
+		$("#seta").attr("src", "/images/arrow-up.png");
+		return true;
+	});
+	</script>
+<% end %>
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+<input type="hidden" name="page" id="pagina" value="<%= params[:page].nil? ? 1 : params[:page]%>">
+<div class="pesquisa" style="margin-top: 30px;">
+	<table width="750px">
+		<tr>
+			<td width="200px">
+				Período:
+			</td>
+			<td width="75px">
+				Status:
+			</td>
+			<td class="<%= @status_periodo %>">
+				<%= @status_periodo %>
+			</td>
+			<td style="font-size: 14px" rowspan="2">
+				<% if @dados_periodo.first.dt_inicio_lancamento <= Time.now %>
+					<% if @dados_periodo.first.dias_faltam > 0 %>
+					Faltam <%= @dados_periodo.first.dias_faltam.to_i %> dias para o fechamento do período!
+					<% end %>
+				<% end %>
+			</td>
+			<td rowspan="2" width="100px">
+				<%= image_tag("/images/graficocirco.png", :alt => "Gráficos", :title => "Gráficos", :width => "25px", :height => "25px", :style => "cursor:pointer;", :onclick => "return abreGrafico();") %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="periodo" onchange="return carregaPeriodo();">
+					<%= options_for_select @periodos.collect{|p| [p.dt_inicio_lancamento.strftime("%d/%m/%Y") + " à " + p.dt_fim_lancamento.strftime("%d/%m/%Y"), p.id]}, :selected => params[:periodo] %>
+				</select>
+			</td>
+			<td>
+				Valor Total Aprovado:
+			</td>
+			<td class="Fechado">
+				<%= number_to_currency(@valor_total.first.total, :unit => "R$", :separator => ",", :delimiter => ".") %>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br>
+
+<div class="menu_expande" style="margin-top:120px;">
+	FILTRO AVANÇADO <%= image_tag("/images/arrow-down.png", :title => "Expandir", :width => "20px", :height => "20px", :id => "seta") %>
+</div>
+
+<div class="menu_aparece">
+	<table  width="100%">
+		<tr>
+			<td>Tipo de Lançamento:</td><td>Tipo de Despesa:</td><td>Status:</td><td>Nº Doc.(NF):</td><td>De:</td><td>Até:</td>
+		</tr>
+		<tr>
+			<td>
+			<select name="tipo_lancamento" id="tipo_lancamento" style="width:150px;">
+				<option value="0"></option>
+				<%= options_for_select @tipo_lancamentos.collect{|tp| [tp.dsc_tipo_lancamento, tp.id]}, :selected => params[:tipo_lancamento] %>
+			</select>
+			</td>
+			<td>
+				<select name="tipo_despesa" id="tipo_despesa">
+					<option value="0"></option>
+					<%= options_for_select @tipo_despesas.collect{|td| [td.dsc_tipo_despesa, td.id]}, :selected => params[:tipo_despesa] %>
+				</select>
+			</td>
+			<td>
+				<select name="status" id="status" style="width: 100px;">
+					<option value="0"></option>
+					<%= options_for_select @status.collect{|s| [s.dsc_status_lancamento, s.id]}, :selected => params[:status] %>
+				</select>
+			</td>
+			<td><input type="text" name="nro_documento" value="<%= params[:nro_documento] %>" size="10" id="nro_documento"></td>
+			<td><input type="text" name="de" value="<%= params[:de] %>" size="10" id="de"></td>
+			<td><input type="text" name="ate" value="<%= params[:ate] %>" size="10" id="ate"></td>
+		</tr>
+		<tr>
+			<td colspan="2">Centro de Custo:</td><td colspan="4">Forma de Pagamento:</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<select name="centro_custo" id="centro_custo" style="width:300px;">
+					<option value="0" style="min-width:300px"></option>
+					<%= options_for_select @centro_custos.collect{|c| [c.cod_centro_custo.to_s + " - " + c.dsc_centro_custo, c.id]}, :selected => params[:centro_custo] %>
+				</select>
+			</td>
+			<td colspan="4">
+				<select name="forma_pagamento" id="forma_pagamento">
+					<option value="0"></option>
+					<%= options_for_select @forma_pagamentos.collect{|f| [f.dsc_forma_pagamento, f.id]}, :selected => params[:forma_pagamento] %>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br>
+
+<div style=" float:right; margin-right:107px;">
+	<%= submit_tag "Buscar", :class => "buscar", :onclick => "document.getElementById('pagina').value = '1';return ValidaCampoDatas();" %>
+	<%= link_to((button_to_function "Novo", "window.location = '/tipo_despesas/new'",:class => "buscar"), "/despesas/new") %>
+</div>
+
+
+	<% if @lancamentos.count != 0 %>
+
+<div class="opcoes">
+		<%= image_tag("/images/cross.png", :title => "Excluir", :alt => "Excluir") %><%= submit_tag "Excluir", :onclick => "return confirm('Tem certeza que deseja excluir?')", :class => "botao" %>&nbsp;&nbsp;
+	<% if @status_periodo != "Fechado" and @status_periodo != "Aprovado" %>
+		<%= image_tag("/images/page_go.png", :title => "Enviar para Aprovação", :alt => "Enviar para Aprovação") %><%= submit_tag "Enviar para Aprovação", :class => "botao" %>
+	<% end %>
+</div>
+
+<br>
+<table class="resultado_pesquisa" style="font-size: 13px;" align="center" >
+		<tr class="titulo" style="background-color: #580000; color: #FFFFFF; font-weight: bold;">
+			<td><input type="checkbox" name="loteSelecionarTodos" id="loteSelecionarTodos" /></td><td style="text-align: center;">Status</td><td>Tipo</td><td colspan="2">Dados</td><td style="text-align: center;">Ações</td>
+		</tr>
+	<% cont = 0 %>
+	<% @lancamentos.each do |l| %>
+		<tr class="<%= cont%2 == 0 ? "zebra" : "" %>">
+			<td>
+				<% if l.status != "Pendente para Aprovação" and l.status != "Aprovado" and l.status != "Expirado" and l.status != "Não Aprovado" %>
+					<input type="checkbox" name="lote[]" value="<%= l.id %>"/>
+				<% end %>
+			</td>
+			<td style="text-align: center;"><%= case l.status
+						when "Pendente"
+							image_tag("/images/edit.png", :alt => "Pendente", :title => "Pendente", :width => "25px", :height => "25px")
+						when "Aprovado"
+							image_tag("/images/Tick.png", :alt => "Aprovado", :title => "Aprovado", :width => "25px", :height => "25px")
+						when "Reprovado"
+							image_tag("/images/editdelete.png", :alt => "Reprovado", :title => "Reprovado", :width => "25px", :height => "25px")
+						when "Pendente para Aprovação"
+							image_tag("/images/pendente_laranja.jpg", :alt => "Pendente para Aprovação", :title => "Pendente para Aprovação", :width => "25px", :height => "25px")
+						when "Expirado"
+							image_tag("/images/expirado.png", :alt => "Expirado", :title => "Expirado", :width => "25px", :height => "25px")
+						when "Não Aprovado"
+							image_tag("/images/nao_aprovado.png", :alt => "Não Aprovado", :title => "Não Aprovado", :width => "25px", :height => "25px")
+					end
+				%>
+			</td>
+			<td>
+				<b><%=	l.dsc_tipo_lancamento %></b>
+			</td>
+			<td style="border-right: none; text-align: left;" class="<%= l.status == "Reprovado" ? "Reprovado" : "" %>">			
+				<b><%=	l.tipo_despesa %></b>
+				<br>
+				Data Lançamento:<b> <%= l.created_at.strftime("%d/%m/%Y") %></b>
+				<br>
+				Descrição: <b><%=	l.dsc_despesa %></b>
+				<br>
+				<% if l.status == "Reprovado" %>
+					Observação:
+					<% if l.dsc_motivo.size <= 20 %>
+						<%= l.dsc_motivo %>
+					<% else %>
+						<%= l.dsc_motivo[0, 19] %><%= image_tag("/images/reticencias.png", :title => l.dsc_motivo)%>
+					<% end %>
+					<br>
+				<% end %>
+				Forma de Pagamento: <b><%= l.dsc_forma_pagamento %></b>
+				<br>
+				<% if @acesso == "RD7WEB003" %>
+					Usuário: <b><%= l.usuario %></b>
+				<% end %>
+			</td>
+			<td  style="text-align: left; border-left: none;" class="<%= l.status == "Reprovado" ? "Reprovado" : "" %>">
+				Data Doc.(NF): <b><%= l.dt_documento.strftime("%d/%m/%Y") %></b> - Nº Doc.(NF): <b><%= l.nro_documento %></b>
+				<br>
+				Valor Doc.(NF): <b><%= number_to_currency(l.vlr_documento, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+				<br>
+				Valor do reembolso: <b><%= number_to_currency(l.vlr_despesa, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+				<br>
+				Quantidade: <b><%= l.nro_quantidade %></b> - Centro de Custo: <b><%= l.cod_centro_custo %></b>
+			</td>
+			<td style="text-align: center;"><% if l.status == "Pendente" %>
+				<%= link_to(image_tag("/images/page_go.png", :title => "Enviar para aprovação"), :commit => "Enviar para Aprovação", :lote => l, :periodo => params[:periodo], :tipo_lancamento => params[:tipo_lancamento], :tipo_despesa => params[:tipo_despesa], :forma_pagamento => params[:forma_pagamento], :status => params[:status], :centro_custo => params[:centro_custo], :page => params[:page], :de => params[:de], :ate => params[:ate], :nro_documento => params[:nro_documento]) %>
+				<br>
+				<% end %>
+				<% if (@periodo.first.dt_inicio_lancamento <= Time.now) and (@periodo.first.dt_fim_lancamento >= Time.now.to_date) %>
+					<%= link_to(image_tag("/images/page_2_copy.png", :title => "Copiar"), new_despesa_url(:commit => "copiar", :despesa => l)) %>
+				<% end %>
+				<br>
+				<% if l.status == "Pendente" or l.status == "Reprovado" %>
+				<%= link_to(image_tag("/images/application_edit.png", :title => "Editar"), edit_despesa_url(l, :commit => "editar")) %>
+				<br>				
+				<%= link_to(image_tag("/images/cross.png", :title => "Excluir", :onclick => "return confirm('Tem certeza que deseja excluir?')"), :commit => "Excluir", :lote => l, :periodo => params[:periodo], :tipo_lancamento => params[:tipo_lancamento], :tipo_despesa => params[:tipo_despesa], :forma_pagamento => params[:forma_pagamento], :status => params[:status], :centro_custo => params[:centro_custo], :page => (params[:page].nil? ? 1 : params[:page]), :de => params[:de], :ate => params[:ate], :nro_documento => params[:nro_documento]) %>
+				<% end %>
+			</td>
+		</tr>
+		<% cont = cont + 1 %>
+	<% end %>
+	</table>
+	<div class="opcoes">
+		<%= image_tag("/images/cross.png", :title => "Excluir", :alt => "Excluir") %><%= submit_tag "Excluir", :onclick => "return confirm('Tem certeza que deseja excluir?')", :class => "botao" %>&nbsp;&nbsp;
+	<% if @status_periodo != "Fechado" and @status_periodo != "Aprovado" %>
+		<%= image_tag("/images/page_go.png", :title => "Enviar para Aprovação", :alt => "Enviar para Aprovação") %><%= submit_tag "Enviar para Aprovação", :class => "botao" %>
+	<% end %>
+	</div>
+	<br>
+	<br>
+		<div style="margin-bottom:94px; margin-left:30%; margin-right:20%;"><%= will_paginate @lancamentos, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+	<br>
+	<br>
+	<% else %>
+		<div class="nenhum_resultado">Pesquisa não retornou nenhum resultado.</div>
+	<% end %>
+	<% end %>
+
+
+<div id="dialog_grafico">
+	<center>
+		<div id="holder" style="background-color: #FFFFFF;"></div>
+	</center>
+</div>

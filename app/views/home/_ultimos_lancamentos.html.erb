@@ -1,0 +1,58 @@
+<fieldset class="listar_fora">
+	<b>ÚLTIMOS LANÇAMENTOS</b>
+	<div class="listar">
+	<table  style="width: 335px; text-align: left; position:relative;">
+		<% for l in @lancamentos do %>
+		<tr>
+			<td rowspan="3" class="tachado" style="border-right: dotted gray 1px;">
+			<%= case l.descricao
+						when "Pendente"
+							image_tag("/images/edit.png", :alt => "Pendente", :title => "Pendente", :width => "25px", :height => "25px")
+						when "Aprovado"
+							image_tag("/images/Tick.png", :alt => "Aprovado", :title => "Aprovado", :width => "25px", :height => "25px")
+						when "Reprovado"
+							image_tag("/images/editdelete.png", :alt => "Reprovado", :title => "Reprovado", :width => "25px", :height => "25px")
+						when "Pendente para Aprovação"
+							image_tag("/images/pendente_laranja.jpg", :alt => "Pendente para Aprovação", :title => "Pendente para Aprovação", :width => "25px", :height => "25px")
+						when "Expirado"
+							image_tag("/images/expirado.png", :alt => "Expirado", :title => "Expirado", :width => "25px", :height => "25px")
+						when "Não Aprovado"
+							image_tag("/images/nao_aprovado.png", :alt => "Não Aprovado", :title => "Não Aprovado", :width => "25px", :height => "25px")
+					end
+			%>
+			</td>
+			<td>
+				<b><%= l.created_at.strftime("%d/%m/%Y") %>&nbsp;<%= l.created_at.strftime("%H:%M") %></b>
+			</td>
+			<td>
+				Valor Doc.(NF)<b><%= number_to_currency(l.vlr_documento, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b><%= l.despesa %></b>
+			</td>
+			<td>
+				Valor do Reembolso: <b><%= number_to_currency(l.vlr_despesa, :unit => "R$", :separator => ",", :delimiter => ".") %></b>
+			</td>
+		</tr>
+		<tr>
+			<td class="tachado">&nbsp;</td>
+			<td align="left" class="tachado">
+			<span class="links">
+				<% if l.status_lancamento_id != 2 and l.status_lancamento_id !=4 and l.status_lancamento_id != 5 and l.status_lancamento_id != 6 and @periodo.first.dt_aprovacao >= Time.now.to_date %>
+					<%= link_to("Editar", edit_despesa_url(l, :commit => "editar")) %>&nbsp;|&nbsp;
+				<% end %>
+				<% if (@periodo.first.dt_inicio_lancamento <= Time.now) and (@periodo.first.dt_fim_lancamento >= Time.now.to_date) %>
+					<%= link_to("Copiar", new_despesa_url(:commit => "copiar", :despesa => l)) %>&nbsp;&nbsp;
+				<% end %>
+				<% if l.status_lancamento_id == 1 and @periodo.first.dt_aprovacao >= Time.now.to_date %>
+					|&nbsp;&nbsp;<%= link_to("Enviar para Aprovação", enviar_aprovacao_despesas_path(:lote => l.id, :ir_para => "home")) %>
+				<% end %>
+			</span>
+			</td>
+		</tr>
+		<% end %>
+	</table>
+	</div>
+</fieldset>

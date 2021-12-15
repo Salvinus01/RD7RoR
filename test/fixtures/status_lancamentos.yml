@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  dsc_status_lancamento: MyString
+  status_status_lancamento: 1
+  usuario_alt_id: 1
+
+two:
+  dsc_status_lancamento: MyString
+  status_status_lancamento: 1
+  usuario_alt_id: 1

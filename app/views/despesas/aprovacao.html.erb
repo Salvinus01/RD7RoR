@@ -1,0 +1,68 @@
+﻿<style>
+	.resultado_pesquisa tr td{
+		text-align: center;
+	}
+</style>
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+	<div class="pesquisa" style="margin-top: 30px;">
+		<table>
+			<tr>
+				<td>Período:</td><td>Usuário:</td><td>Status:</td><td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="periodo" id="periodo" onchange="document.forms[0].submit();">
+						<%= options_for_select @periodos.collect{|p| [p.dt_inicio_lancamento.strftime("%d/%m/%Y") + " à " + p.dt_fim_lancamento.strftime("%d/%m/%Y"), p.id]}, :selected => params[:periodo] %>
+					</select>
+				</td>
+				<td>
+					<select name="usuario" id="usuario">
+						<option value="0"></option>
+						<%= options_for_select @usuarios.collect{|u| [u.nome, u.id]}, :selected => params[:usuario].to_s.last.to_i %>
+					</select>
+				</td>
+				<td>
+					<select name="status" id="status">
+						<option value="0"></option>
+						<%= options_for_select @status.where("id <> 1").collect{|s| [s.dsc_status_lancamento, s.id]}, :selected => params[:status] %>
+					</select>
+				</td>
+				
+				<td>
+					<%= submit_tag "Buscar", :class => "buscar" %>
+				</td>
+			</tr>
+		</table>
+	</div>
+<% end %>
+<% if @lancamentos.count !=0 %>
+
+	<table class="resultado_pesquisa" style="font-size: 13px; float:right; margin-right:105px;" >
+		<tr class="titulo">
+			<td style="text-align: center;" rowspan="2">Status</td><td rowspan="2">Usuário</td><td colspan="2">Pendentes</td><td colspan="2">Aprovadas</td><td colspan="2">Reprovadas</td><td style="text-align: center;" rowspan="2">Detalhe</td>
+		</tr>
+		<tr class="titulo">
+			<td>Qtd.</td><td>Valor</td><td>Qtd.</td><td>Valor</td><td>Qtd.</td><td>Valor</td>
+		</tr>
+		<% cont = 0 %>
+		<% for l in @lancamentos do %>
+			<tr class="<%= cont%2 == 0 ? "zebra" : "" %>">
+				<td style="text-align: center;"><%= l.nr_pendente_aprovacao == 0 && l.nr_reprovado == 0 ? image_tag("/images/Tick.png", :alt => "Aprovado", :title => "Aprovado", :width => "25px", :height => "25px") : l.nr_reprovado != 0 && l.nr_pendente_aprovacao == 0 ? image_tag("/images/editdelete.png", :alt => "Reprovado", :title => "Reprovado", :width => "25px", :height => "25px") : image_tag("/images/pendente_laranja.jpg", :alt => "Pendente para Aprovação", :title => "Pendente para Aprovação", :width => "25px", :height => "25px") %></td>
+				<td><%= l.nome %></td>
+				<td><%= l.nr_pendente_aprovacao %></td><td><%= number_to_currency(l.vlr_pendente_aprovacao, :unit => "R$", :separator => ",", :delimiter => ".") %></td>
+				<td><%= l.nr_aprovado %></td><td><%= number_to_currency(l.vlr_aprovado, :unit => "R$", :separator => ",", :delimiter => ".") %></td>
+				<td><%= l.nr_reprovado %></td><td><%= number_to_currency(l.vlr_reprovado, :unit => "R$", :separator => ",", :delimiter => ".") %></td>
+				<td style="text-align: center;"><%= link_to(image_tag("/images/zoom.png", :alt => "Detalhe", :title => "Detalhe"), aprovacao_detalhe_despesas_url(:usuario => l.usuario_id, :periodo => params[:periodo])) %></td>
+				<% cont = cont+1 %>
+			</tr>
+		<% end %>
+	</table>
+	<div class="nenhum_resultado" style="padding-top:40px; margin-left:40%; margin-right:30%;"><%= will_paginate @lancamentos, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+
+<% else %>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="nenhum_resultado">Pesquisa não retornou nenhum resultado.</div>
+<% end %>

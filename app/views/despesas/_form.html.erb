@@ -1,0 +1,65 @@
+﻿<div class="cadastro">
+<%= form_for(@lancamento) do |l| %>
+	<% if @periodo.count == 0 %>
+		<%=  %>
+	<% else %>
+		<%= hidden_field_tag :periodo, @periodo.first.id %>
+	<% end %>
+	<input type="hidden" name="despesa[usuario_alt_id]" id="despesa_usuario_alt_id" value="<%= @usuario_logado.id %>">
+	<input type="hidden" name="despesa[usuario_id]" id="despesa_usuario_id" value="<%= @usuario_logado.id %>">
+	<input type="hidden" id="despesa_status_lancamento_id" name="despesa[status_lancamento_id]" value="1" >
+	<table  >
+		<tr>
+			<td><%= l.label :tipo_lancamento_id %></td><td><%= l.label :tipo_despesa_id %></td>
+		</tr>
+		<tr>
+			<td><%= l.collection_select :tipo_lancamento_id, @tipo_lancamentos, :id, :dsc_tipo_lancamento, {:include_blank => true}, :required => true, :style => "width:150px" %></td>
+			<td><%= l.collection_select :tipo_despesa_id, @tipo_despesas, :id, :dsc_tipo_despesa, {:include_blank => true}, :required => true, :style => "width:150px" %></td>
+		</tr>
+		<tr>
+			<td><%= l.label :forma_pagamento_id%></td><td><%= l.label :centro_custo_id %></td>
+		</tr>
+		<tr>
+			<td><%= l.collection_select :forma_pagamento_id, @forma_pagamentos, :id, :dsc_forma_pagamento, {:include_blank => true}, :required => true, :style => "width:150px" %></td>
+			<td><%= l.collection_select :centro_custo_id, @centro_custos, :id, :dsc_centro_custo, {:include_blank => true}, :required => true, :style => "width:150px" %></td>
+		</tr>
+		<tr>
+			<td><%= l.label :dt_documento %></td><td><%= l.label :nro_documento %></td>
+		</tr>
+		<tr>
+			<td><%= l.text_field :dt_documento, :size => "25", :required => true, :style => "width:100px" %></td><td><%= l.text_field :nro_documento, :required => true, :style => "width:100px", :maxlength => "15" %></td>
+		</tr>
+		<tr>
+			<td><%= l.label :vlr_documento %></td><td><%= l.label :nro_quantidade %></td>
+		</tr>
+		<tr>
+			<td><%= l.text_field :vlr_documento, :required => true, :style => "width:100px" %></td><td><%= l.text_field :nro_quantidade, :style => "width:100px", :required => true, :onkeypress => "return FormatarNumero(event);", :maxlength => "3" %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= l.label :vlr_despesa %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= l.text_field :vlr_despesa, :style => "width:100px" %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= l.label :dsc_despesa %></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= l.text_area :dsc_despesa, :rows => "8", :required => true %></td>
+		</tr>
+		<tr>
+			<td colspan="2" style="text-align: left;"><input type="checkbox" name="flgEnvioAuto" value="true">Enviar automaticamente para Aprovação</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="text-align: right;"><%= l.submit "Salvar", :class => "buscar", :onclick => "return verificaLancamento();" %> &nbsp; <%= link_to((button_to_function "Voltar", "history.go(-1);",:class => "buscar"), :back) %></td>
+		</tr>
+	</table>
+	<br>
+	<br>
+<% end %>
+<% if !(@periodo.first.dt_inicio_lancamento <= Time.now) or !(@periodo.first.dt_fim_lancamento >= Time.now.to_date) and params[:commit] != "editar" %>
+	<script>
+		desabilitaForm();
+	</script>
+<% end %>
+</div>

@@ -1,0 +1,13 @@
+﻿Bem-vindo(a)!<br>
+Pessoa.
+<div class="menu">
+	<%= link_to(image_tag("/images/Novo.png", :alt => "Nova Despesa"), new_despesa_url) %><%= link_to(image_tag("/images/Pesquisar.png", :alt => "Consultar Despesas"), despesas_url)%>
+</div>
+<div class="periodo_atual">
+	<%= image_tag("/images/inf.png", :width => "100px", :height => "100px", :style => "float:left; margin-right: 25px;") %>
+	<% if @periodo.first.dt_inicio_lancamento <= Time.now && @periodo.first.dt_fim_lancamento >= Time.now %>
+		Período Atual:<br><b><%= @periodo.first.dt_inicio_lancamento.strftime("%d/%m/%Y") %>&nbsp;à&nbsp;<%= @periodo.first.dt_fim_lancamento.strftime("%d/%m/%Y") %>
+	<% else %>
+		Não há Período Aberto.
+	<% end %>
+</div>

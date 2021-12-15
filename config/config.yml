@@ -1,0 +1,6 @@
+﻿development:
+  cookie_name: "_SevenControlAuth_session"
+  cod_produto: "RD7"
+production:
+  cookie_name: "_SevenControlAuth_session"
+  cod_produto: "RD7"

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+	<head> 
+		<title>RD7</title>
+			<%= javascript_include_tag :all %>
+			<%= stylesheet_link_tag "/stylesheets/application_mobile.css", "/stylesheets/flash.css", "/stylesheets/jquery-ui-1.8.13.custom.css", "/stylesheets/jquery-ui-1.8.17.custom.css" %>
+			<%= csrf_meta_tag %>
+	</head>
+	<script>
+		carregaData();
+	</script>
+	<body>
+		<div id="cabecalho">
+			<div class="imagem_logo">
+				<%= link_to(image_tag("/images/logo.png", :title => "RD7"), home_index_url) %>
+			</div>
+			<div class="nav_bar">
+			<% if @nav_bar.nil? %>
+				<script>
+						document.write(diaSem[myday]);
+						document.write(myweekday+" de "+meses[mymonth]);
+				</script>
+				<br> Último acesso: <br> 29/07/2011 às  17:43
+			<% else %>
+				<%= @nav_bar %>
+			<% end %>
+			</div>
+		</div>
+		<div id="page">		
+			<div id="principal">
+				<div id="opcoes">
+					<div class="botoes">
+						<%= image_tag("/images/sair.png", :width => "60px", :height => "60px") %>SAIR
+					</div>
+					<div class="botoes">
+						<%= image_tag("/images/engrenagem.png", :width => "90px", :height => "90px") %>
+					</div>
+				</div>
+				
+				<%= yield %>
+
+			</div>
+			<div id="rodape"><b>RD7®</b> Todos os direitos reservados</div>
+		</div>
+		
+		<div id="flash">
+			<%= flash_messages %>
+		</div>
+		
+	</body>
+</html>

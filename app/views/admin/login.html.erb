@@ -1,0 +1,31 @@
+﻿<%= form_tag fazer_login_url(@usuario), :method => :post do %>
+
+	<div class="tudo" >
+		<div class="corpo">
+			 <div id="log">Login</div>
+			<br>
+			<br>
+			<label>
+				<div >Usuário: </div>
+				<%= text_field_tag :DscLogin, nil, :size=>45, :style => "width: 300px;" %>
+			</label>
+			<br><br>
+			<label>
+				<div >Senha:</div>
+				<%= password_field_tag :password, nil, :size=>45, :style => "width: 300px;" %>  
+			</label>
+			<br>
+			<br>
+								
+		</div>
+		
+		<div class="corpinho">
+				
+			<div style="float:left"><%= link_to "Esqueci minha senha", recover_url %></div>
+								
+			<div style="float:right; margin-right:29px"><%= submit_tag "Entrar", :class => "buscar" %> </div>
+			
+		</div>
+</div>
+
+<% end %>

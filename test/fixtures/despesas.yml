@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  periodo_id: 
+  usuario_id: 
+  tipo_lancamento_id: 
+  tipo_despesa_id: 
+  forma_pagamento_id: 
+  centro_custo_id: 
+  dt_documento: 2012-01-30 14:52:31
+  nro_documento: MyString
+  vlr_documento: 1.5
+  nro_quantidade: 1
+  vlr_despesa: 1.5
+  dsc_despesa: MyText
+  status_lancamento_id: 
+  usuario_alt_id: 1
+
+two:
+  periodo_id: 
+  usuario_id: 
+  tipo_lancamento_id: 
+  tipo_despesa_id: 
+  forma_pagamento_id: 
+  centro_custo_id: 
+  dt_documento: 2012-01-30 14:52:31
+  nro_documento: MyString
+  vlr_documento: 1.5
+  nro_quantidade: 1
+  vlr_despesa: 1.5
+  dsc_despesa: MyText
+  status_lancamento_id: 
+  usuario_alt_id: 1

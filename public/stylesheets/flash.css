@@ -1,0 +1,78 @@
+div.notice,
+div.notice,
+div.warning,
+div.error {
+  font-size: 18px;
+  padding: 15px 10px;
+  margin-bottom: 10px;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+}
+
+div.notice span,
+div.warning span,
+div.error span {
+  float: left;
+  width: 42px;
+  height: 32px;
+  margin-top: -5px;
+}
+
+div.notice {
+	background: #00CD66; /* para browsers sem suporte a CSS 3 */ 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#008B45", endColorstr="#00CD66"); /* IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#008B45), to(#00CD66)); /* webkit browsers */
+	background: -moz-linear-gradient(top,  #008B45,  #00CD66); /* Firefox 3.6+ */
+	color: #41612f;
+	text-align: center;	
+}
+div.notice span {
+  background: url(../images/flash-check.png) no-repeat left top;
+}
+
+div.warning {
+  background: url(../images/flash-warning-bg.jpg) repeat-x left -10px;
+  color: #a26a1a;
+}
+div.warning span {
+  margin-top: -6px;
+  background: url(../images/flash-warning.png) no-repeat left top;
+}
+
+div.error {
+	/* background: url(../images/flash-error-bg.jpg) repeat-x left -10px; */
+	background: #f00; /* para browsers sem suporte a CSS 3 */ 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#CD2626", endColorstr="#EE2C2C"); /* IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#CD2626), to(#EE2C2C)); /* webkit browsers */
+	background: -moz-linear-gradient(top,  #CD2626,  #EE2C2C); /* Firefox 3.6+ */
+	color: #af0100;
+	text-align: center;
+}
+div.error span {
+  margin-top: -6px;
+  background: url(../images/flash-error.png) no-repeat left top;
+}
+
+div.notice,
+div.notice,
+div.warning,
+div.error {
+  color: #F0FFF0;
+}
+
+div.notice h5,
+div.notice h5,
+div.warning h5,
+div.error h5 {
+  color: #F0FFF0;
+}
+
+div.formErrors h5 {
+	font-size:1.6em;
+}
+
+div.formErrors ul {
+	list-style:none;
+}

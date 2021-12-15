@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<%= stylesheet_link_tag  "/stylesheets/application.css", "/stylesheets/flash.css", "/stylesheets/jquery-ui-1.8.13.custom.css", "/stylesheets/jquery-ui-1.8.17.custom.css" %>
+<%= javascript_include_tag :all %>
+<title>RD7</title>
+</head>
+	<div id="page">
+		<%= image_tag("/images/logo.png", :title => "RD7") %>
+		<div class="menu">
+		</div>
+	<div id="principal">	
+		<%= yield %>
+		<div id="notice" >
+				<%= flash_messages %>
+		</div>
+	</div>
+	
+	<div id="rodape"><b>RD7®</b> Todos os direitos reservados</div>
+	</div>
+	
+</html>

@@ -1,0 +1,96 @@
+﻿
+
+<br>
+<br>
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+<input type="hidden" name="page" id="pagina" value="<%= params[:page].nil? ? 1 : params[:page]%>">
+<div class="pesquisa">
+	<table style="float:left;" >
+		<tr>
+			<td>Código:</td><td >Descrição:</td><td>Status:</td>
+		</tr>
+		<tr>
+			<td>
+				<%= text_field_tag(:codigo, nil, :size => 10, :value => params[:codigo], :maxlenght => 11) %>
+			</td>
+			<td>
+				<%= text_field_tag(:descricao, nil, :size => 35, :value => params[:descricao]) %>
+			</td>
+			<td>
+				<%= check_box_tag(:ativo, 1, (params[:ativo] == "1" ? true : false)) %>Ativo&nbsp;<%= check_box_tag(:inativo, 0, (params[:inativo] == "0" ? true : false)) %>Inativo
+			</td>
+			<td align=right width=250px colspan="3">
+				<%= submit_tag "Buscar", :class => "buscar", :onclick => "document.getElementById('pagina').value = '1'" %>
+				<%= link_to((button_to_function "Novo", "window.location = '/centro_custos/new'",:class => "buscar"), "/centro_custos/new") %>
+			</td>
+		
+	</table>	
+	
+</div>
+
+<% if @centro_custos.count != 0 %>
+<br>
+<div style="float:right; margin-right:100px; margin-top:10px;">
+		<%= image_tag("/images/tick_circle_frame.png", :title => "Ativar", :alt => "Ativar") %><%= submit_tag "Ativar", :class => "botao" %>&nbsp;&nbsp;
+		<%= image_tag("/images/minus_circle_frame.png", :title => "Inativar") %><%= submit_tag "Inativar", :class => "botao" %>
+</div>
+ 
+<table class="resultado_pesquisa" align="center">
+	<tr class="titulo">
+		<td style="text-align: center;"><input type="checkbox" name="loteSelecionarTodos" id="loteSelecionarTodos" /></td>
+		<td id="cod">Código<img src="/images/seta_acima.png" id="img_cod" onclick="return alteraOrdem('cod');" style="cursor: pointer" title="Ordenar"></td>
+		<td id="desc">Descrição<img src="/images/seta_acima.png" id="img_desc" onclick="return alteraOrdem('desc');" style="cursor: pointer" title="Ordenar"></td>
+		<td>Status</td>
+		<td  style="text-align: center;">Ações</td>
+	</tr>
+	
+	<% cont = 0 %>
+	<% for c in @centro_custos do %>
+		<tr class="<%= cont%2 == 0 ? "zebra" : "" %>" >
+			<td style="text-align: center;"><input type="checkbox" name="lote[]" value="<%= c.id %>"/></td>
+			<td><%= c.cod_centro_custo %></td>
+			<td><%= c.dsc_centro_custo %></td>
+			<td><%= c.status_centro_custo == 0 ? "Inativo" : "Ativo" %></td>
+			<td  style="text-align: center;"><%= link_to(image_tag("/images/application_edit.png", :title => "Editar", :alt => "Editar"), edit_centro_custo_path(c)) %></td>
+			<% cont = cont+1 %>
+	</tr>
+	<% end %>
+	
+</table><br>	 
+
+<input type="hidden" name="ordem" id="ordem" value="<%= params[:ordem] %>">
+
+<div style="float:right; margin-right:100px; margin-top:-10px;">
+		<%= image_tag("/images/tick_circle_frame.png", :title => "Ativar", :alt => "Ativar") %><%= submit_tag "Ativar", :class => "botao" %>&nbsp;&nbsp;
+		<%= image_tag("/images/minus_circle_frame.png", :title => "Inativar") %><%= submit_tag "Inativar", :class => "botao" %>
+</div>
+<br>
+<% else %>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="nenhum_resultado">Pesquisa não retornou resultado.</center></div>
+<% end %>		
+<% end %>
+<br>
+<br>
+
+<div style="margin-bottom:94px; margin-left:40%; margin-right:30%;"><%= will_paginate @centro_custos, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+
+
+</table>
+<script type="text/javascript">
+
+		function loteSelecionarTodos() {
+			var ativar = "checked" == $("#loteSelecionarTodos").attr("checked");
+			$("input[name=lote\\[\\]]").attr("checked", ativar);
+		}
+		
+		$("#loteSelecionarTodos").unbind('change').live('change', loteSelecionarTodos);
+
+</script>
+
+<script>
+	sublinha();
+</script>

@@ -1,0 +1,22 @@
+﻿
+<%= form_for(@centro_custo) do |c| %>
+	<div class="cadastro">
+		<input type="hidden" name="centro_custo[usuario_alt_id]" id="centro_custo_usuario_alt_id" value="<%= @usuario_logado.id %>">
+		<%= c.label :cod_centro_custo %>
+		<br>
+		<%= c.text_field :cod_centro_custo, :size => 10, :required => true %>
+		<br>
+		<br>
+		<%= c.label :dsc_centro_custo %>
+		<br>
+		<%= c.text_field :dsc_centro_custo, :required => true %>
+		<br>
+		<br>
+		<%= c.label :status_centro_custo %>
+		<br>
+		<%= c.radio_button :status_centro_custo, 1, :required => true, :checked => "checked" %> Ativo&nbsp;<%= c.radio_button :status_centro_custo, 0, :required => true %> Inativo
+		<br>
+		<br>
+		<%= c.submit "Salvar", :class => "buscar" %>&nbsp;<%= link_to((button_to_function "Cancelar", "window.location = '/centro_custos'",:class => "buscar"), centro_custos_url) %>
+	</div>
+<% end %>

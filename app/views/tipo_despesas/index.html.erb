@@ -1,0 +1,78 @@
+﻿
+<br>
+<br>
+<%= form_tag nil, :id => "pesquisa", :method => "get" do %>
+<input type="hidden" name="page" id="pagina" value="<%= params[:page].nil? ? 1 : params[:page]%>">
+<div class="pesquisa">
+		<table style="float:left;" >
+		<tr>
+			<td>Descrição:</td><td>Status:</td>
+		</tr>
+		<tr>
+			<td>
+				<%= text_field_tag(:descricao, nil, :size => 35, :value => params[:descricao]) %>
+			</td>
+			<td width="200px;">
+				<%= check_box_tag(:ativo, 1, (params[:ativo] == "1" ? true : false)) %>Ativo&nbsp;<%= check_box_tag(:inativo, 0, (params[:inativo] == "0" ? true : false)) %>Inativo
+			</td>
+			<td align=right width=460px colspan="3">
+				<%= submit_tag "Buscar", :class => "buscar", :onclick => "document.getElementById('pagina').value = '1'" %>
+				<%= link_to((button_to_function "Novo", "window.location = '/tipo_despesas/new'",:class => "buscar"), "/tipo_despesas/new") %>
+			</td>
+		
+	</table>	
+	
+	
+</div>
+
+<br >
+<% if @tipo_despesa.count != 0 %>
+<div style="float:right; margin-right:100px; margin-top:10px;">
+		<%= image_tag("/images/tick_circle_frame.png", :title => "Ativar", :alt => "Ativar") %><%= submit_tag "Ativar", :class => "botao" %>&nbsp;&nbsp;
+		<%= image_tag("/images/minus_circle_frame.png", :title => "Inativar") %><%= submit_tag "Inativar", :class => "botao" %>
+</div>
+
+<table class="resultado_pesquisa" align="center">
+	<tr class="titulo">
+		<td style="text-align: center;"><input type="checkbox" name="loteSelecionarTodos" id="loteSelecionarTodos" /></td>
+		<td>Descrição</td>
+		<td>Status</td>
+		<td style="text-align: center;">Ações</td>
+	</tr>
+	
+	<% cont = 0 %>
+	<% for d in @tipo_despesa do %>
+		<tr class="<%= cont%2 == 0 ? "zebra" : "" %>">
+			<td style="text-align: center;"><input type="checkbox" name="lote[]" value="<%= d.id %>"/></td>
+			<td><%= d.dsc_tipo_despesa %></td>
+			<td><%= d.status_tipo_despesa == 0 ? "Inativo" : "Ativo" %></td>
+			<td style="text-align: center;"><%= link_to(image_tag("/images/application_edit.png", :title => "Editar", :alt => "Editar"), edit_tipo_despesa_path(d)) %></td>
+			<% cont = cont+1 %>
+	</tr>
+	<% end %>
+
+</table><br>
+<div style="float:right; margin-right:100px; margin-top:-10px;">
+		<%= image_tag("/images/tick_circle_frame.png", :title => "Ativar", :alt => "Ativar") %><%= submit_tag "Ativar", :class => "botao" %>&nbsp;&nbsp;
+		<%= image_tag("/images/minus_circle_frame.png", :title => "Inativar") %><%= submit_tag "Inativar", :class => "botao" %>
+</div>
+<% else %>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="nenhum_resultado">Pesquisa não retornou nenhum resultado</div>
+<% end %>
+<br><br><br>	
+<% end %>
+<div style="margin-left:40%; margin-right:30%; margin-bottom:10%; margin-top:-3px;"><%= will_paginate @tipo_despesa, :previous_label => "&laquo; Anterior", :next_label => "Próxima &raquo;" %></div>
+<script type="text/javascript">
+
+		function loteSelecionarTodos() {
+			var ativar = "checked" == $("#loteSelecionarTodos").attr("checked");
+			$("input[name=lote\\[\\]]").attr("checked", ativar);
+		}
+		
+		$("#loteSelecionarTodos").unbind('change').live('change', loteSelecionarTodos);
+
+</script>
